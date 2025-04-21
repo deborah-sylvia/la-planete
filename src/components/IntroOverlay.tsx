@@ -27,9 +27,9 @@ export const IntroOverlay: React.FC<IntroOverlayProps> = ({ onComplete }) => {
       // .to(".intro-text-1", { opacity: 0, duration: 0.6 }, "+=2")
       // .to(".intro-text-2", { opacity: 1, duration: 0.8 }, "+=0.4")
       // .to(".intro-text-2", { opacity: 0, duration: 0.6 }, "+=2")
-      .to(".intro-text-3", { opacity: 1, duration: 0.8 }, "+=0.4")
-      .to(".intro-final", { opacity: 1, duration: 1.2 }, "+=2")
-      .to(overlayRef.current, { opacity: 0, duration: 1 }, "+=1.5");
+      .to(".intro-text-3", { opacity: 1, duration: 0.1 }, "+=0.4")
+      .to(".intro-final", { opacity: 1, duration: 0.5 }, "+=0.5")
+      .to(overlayRef.current, { opacity: 0, duration: 1 }, "+=0.5");
 
     return () => {
       if (timelineRef.current) {
@@ -64,7 +64,7 @@ export const IntroOverlay: React.FC<IntroOverlayProps> = ({ onComplete }) => {
           <AnimatedText
             text="Scroll to explore"
             className="text-xl md:text-2xl font-light"
-            delay={0.5}
+            delay={0.1}
           />
         </div>
 
