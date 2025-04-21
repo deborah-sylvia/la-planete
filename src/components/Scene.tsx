@@ -158,7 +158,7 @@ export const Scene: React.FC<SceneProps> = ({ isActive }) => {
       >
         {/* Scroll Content */}
         <div className="scroll-content fixed inset-0">
-          <section className="scroll-section h-screen flex items-center justify-center">
+          <section className="scroll-section h-screen flex items-center justify-center absolute inset-0">
             <div className="container mx-auto px-4 text-center pointer-events-auto">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 opacity-0 transform translate-y-8 transition-all duration-1000 section-1-text">
                 Begin Your Journey
@@ -170,7 +170,7 @@ export const Scene: React.FC<SceneProps> = ({ isActive }) => {
             </div>
           </section>
 
-          <section className="scroll-section h-screen flex items-center justify-center">
+          <section className="scroll-section h-screen flex items-center justify-center absolute inset-0">
             <div className="container mx-auto px-4 text-center pointer-events-auto">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 opacity-0 transform translate-y-8 transition-all duration-1000 section-2-text">
                 Eternal Connection
@@ -181,7 +181,7 @@ export const Scene: React.FC<SceneProps> = ({ isActive }) => {
             </div>
           </section>
 
-          <section className="scroll-section h-screen flex items-center justify-center">
+          <section className="scroll-section h-screen flex items-center justify-center absolute inset-0">
             <div className="container mx-auto px-4 text-center pointer-events-auto">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 opacity-0 transform translate-y-8 transition-all duration-1000 section-3-text">
                 Moments That Last
@@ -192,7 +192,7 @@ export const Scene: React.FC<SceneProps> = ({ isActive }) => {
             </div>
           </section>
 
-          <section className="scroll-section h-screen flex items-center justify-center">
+          <section className="scroll-section h-screen flex items-center justify-center absolute inset-0">
             <div className="container mx-auto px-4 text-center pointer-events-auto">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 opacity-0 transform translate-y-8 transition-all duration-1000 section-4-text">
                 Beyond Reality
@@ -203,7 +203,7 @@ export const Scene: React.FC<SceneProps> = ({ isActive }) => {
             </div>
           </section>
 
-          <section className="scroll-section h-screen flex items-center justify-center">
+          <section className="scroll-section h-screen flex items-center justify-center absolute inset-0">
             <div className="container mx-auto px-4 text-center pointer-events-auto">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 opacity-0 transform translate-y-8 transition-all duration-1000 section-5-text">
                 Valentime
@@ -211,7 +211,18 @@ export const Scene: React.FC<SceneProps> = ({ isActive }) => {
               <p className="text-lg md:text-xl max-w-2xl mx-auto opacity-0 transform translate-y-8 transition-all duration-1000 delay-300 section-5-text">
                 Where love and time become one
               </p>
-              <button className="mt-8 px-6 py-3 bg-white text-black rounded-full font-medium opacity-0 transform translate-y-8 transition-all duration-1000 delay-600 section-5-text hover:bg-opacity-80 transition-colors">
+              <button
+                onClick={() => {
+                  if (scrollSmootherRef.current) {
+                    // Smoothly reset scroll position
+                    scrollSmootherRef.current.scrollTo(0, 3);
+                    if (sceneManagerRef.current) {
+                      sceneManagerRef.current.restart();
+                    }
+                  }
+                }}
+                className="mt-8 px-6 py-3 bg-white text-black rounded-full font-medium opacity-0 transform translate-y-8 transition-all duration-1000 delay-600 section-5-text hover:bg-opacity-80 transition-colors"
+              >
                 Begin Again
               </button>
             </div>

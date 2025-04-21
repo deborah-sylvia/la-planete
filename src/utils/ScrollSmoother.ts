@@ -78,6 +78,18 @@ export class ScrollSmoother {
     this.contentHeight = this.scrollElement.scrollHeight;
   };
   
+  public scrollTo(position: number, duration: number = 1.5): void {
+    gsap.to(this, {
+      targetScrollZ: position,
+      scrollZ: position,
+      duration: duration,
+      ease: "power3.inOut",
+      onUpdate: () => {
+        this.content.style.transform = `translate3d(0, 0, ${-this.scrollZ}px)`;
+      }
+    });
+  }
+  
   private onWheel = (e: WheelEvent): void => {
     e.preventDefault();
     

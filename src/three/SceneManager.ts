@@ -74,8 +74,8 @@ export class SceneManager {
     
     // Update spatial objects
     this.spatialObjects.forEach((object, index) => {
-      object.rotation.y += 0.001 * (index + 1);
-      object.rotation.x += 0.0005 * (index + 1);
+      object.rotation.y += 0.001;
+      object.rotation.x += 0.0005;
     });
     
     // Smoothly interpolate camera position
@@ -102,6 +102,41 @@ export class SceneManager {
         element.classList.remove('translate-y-8');
       });
     }
+  }
+  
+  public restart(): void {
+    // Reset camera position
+    this.targetCameraPosition.copy(this.initialCameraPosition);
+    this.renderer.camera.position.copy(this.initialCameraPosition);
+    
+    // Reset particles and spatial objects
+    if (this.particles) {
+      this.particles.rotation.set(0, 0, 0);
+    }
+    
+    this.spatialObjects.forEach(object => {
+      object.rotation.set(0, 0, 0);
+    });
+    
+    // Reset all section texts
+    const sections = document.querySelectorAll('.scroll-section');
+    sections.forEach(section => {
+      section.classList.remove('active');
+      const sectionIndex = Array.from(sections).indexOf(section);
+      const texts = document.querySelectorAll(`.section-${sectionIndex + 1}-text`);
+      texts.forEach(text => {
+        text.classList.remove('opacity-100');
+        text.classList.add('translate-y-8');
+      });
+    });
+    
+    // Show first section
+    sections[0].classList.add('active');
+    const firstTexts = document.querySelectorAll('.section-1-text');
+    firstTexts.forEach(text => {
+      text.classList.add('opacity-100');
+      text.classList.remove('translate-y-8');
+    });
   }
   
   public onResize(): void {
