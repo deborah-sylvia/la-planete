@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SceneRenderer } from "../three/SceneRenderer";
@@ -18,6 +18,8 @@ export const Scene: React.FC<SceneProps> = ({ isActive }) => {
   const sceneManagerRef = useRef<SceneManager | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const scrollSmootherRef = useRef<ScrollSmoother | null>(null);
+  const [showToast, setShowToast] = useState(false);
+  const previousSectionRef = useRef<number>(-1);
 
   useEffect(() => {
     if (!containerRef.current || !isActive || !scrollContainerRef.current)
@@ -48,44 +50,42 @@ export const Scene: React.FC<SceneProps> = ({ isActive }) => {
           const sectionProgress = progress * totalSections;
           const currentSection = Math.floor(sectionProgress);
 
-          if (currentSection >= 0 && currentSection < totalSections) {
-            const prevSection = document.querySelector(
-              ".scroll-section.active"
+          // Only proceed if we have a valid section and it's different from the previous one
+          if (
+            currentSection >= 0 &&
+            currentSection < totalSections &&
+            currentSection !== previousSectionRef.current
+          ) {
+            // Hide all sections first
+            sections.forEach((section) => {
+              const sectionElement = section as HTMLElement;
+              section.classList.remove("active");
+              sectionElement.style.opacity = "0";
+              sectionElement.style.visibility = "hidden";
+              sectionElement.style.pointerEvents = "none";
+            });
+
+            // Show only the current section
+            const newSection = sections[currentSection] as HTMLElement;
+            newSection.classList.add("active");
+            newSection.style.opacity = "1";
+            newSection.style.visibility = "visible";
+            newSection.style.pointerEvents = "auto";
+
+            // Show text for current section
+            const sectionTexts = document.querySelectorAll(
+              `.section-${currentSection + 1}-text`
             );
-            const newSection = sections[currentSection];
+            sectionTexts.forEach((element) => {
+              element.classList.add("opacity-100");
+              element.classList.remove("translate-y-8");
+            });
 
-            // Only update if the section actually changed
-            if (prevSection !== newSection) {
-              // Remove active class from previous section
-              if (prevSection) {
-                prevSection.classList.remove("active");
-                // Hide text from previous section
-                const prevSectionIndex =
-                  Array.from(sections).indexOf(prevSection);
-                const prevTexts = document.querySelectorAll(
-                  `.section-${prevSectionIndex + 1}-text`
-                );
-                prevTexts.forEach((element) => {
-                  element.classList.remove("opacity-100");
-                  element.classList.add("translate-y-8");
-                });
-              }
+            // Update previous section reference
+            previousSectionRef.current = currentSection;
 
-              // Add active class to new section
-              newSection.classList.add("active");
-
-              // Show text for new section
-              const sectionTexts = document.querySelectorAll(
-                `.section-${currentSection + 1}-text`
-              );
-              sectionTexts.forEach((element) => {
-                element.classList.add("opacity-100");
-                element.classList.remove("translate-y-8");
-              });
-
-              // Trigger sound effect only on actual section change
-              AudioManager.playSound("sectionChange");
-            }
+            // Trigger sound effect only on actual section change
+            AudioManager.playSound("sectionChange");
           }
         }
       });
@@ -141,6 +141,13 @@ export const Scene: React.FC<SceneProps> = ({ isActive }) => {
     };
   }, [isActive]);
 
+  const handleEmailClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigator.clipboard.writeText("works.syl@gmail.com");
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 2000);
+  };
+
   return (
     <div className="relative w-full h-screen">
       {/* 3D Canvas Container */}
@@ -158,73 +165,128 @@ export const Scene: React.FC<SceneProps> = ({ isActive }) => {
       >
         {/* Scroll Content */}
         <div className="scroll-content fixed inset-0">
-          <section className="scroll-section h-screen flex items-center justify-center absolute inset-0">
-            <div className="container mx-auto px-4 text-center pointer-events-auto">
+          <section className="scroll-section h-screen flex items-center justify-center absolute inset-0 transition-all duration-500">
+            <div className="container mx-auto px-4 text-center pointer-events-auto relative z-10">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 opacity-0 transform translate-y-8 transition-all duration-1000 section-1-text">
-                Begin Your Journey
+                Sylvia Deborah
               </h2>
               <p className="text-lg md:text-xl max-w-2xl mx-auto opacity-0 transform translate-y-8 transition-all duration-1000 delay-300 section-1-text">
-                Explore the interconnection of love and time through an
-                immersive experience
+                Product Strategist & Designer (PSD) | Born 2002 | Female |
+                Graduated Mid-2024
               </p>
             </div>
           </section>
 
-          <section className="scroll-section h-screen flex items-center justify-center absolute inset-0">
-            <div className="container mx-auto px-4 text-center pointer-events-auto">
+          <section className="scroll-section h-screen flex items-center justify-center absolute inset-0 transition-all duration-500">
+            <div className="container mx-auto px-4 text-center pointer-events-auto relative z-10">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 opacity-0 transform translate-y-8 transition-all duration-1000 section-2-text">
-                Eternal Connection
+                Product Analyst II
               </h2>
               <p className="text-lg md:text-xl max-w-2xl mx-auto opacity-0 transform translate-y-8 transition-all duration-1000 delay-300 section-2-text">
-                Discover how love transcends the boundaries of space and time
+                Currently at Pints AI | Based in Indonesia, Singapore | Open to
+                remote opportunities
               </p>
             </div>
           </section>
 
-          <section className="scroll-section h-screen flex items-center justify-center absolute inset-0">
-            <div className="container mx-auto px-4 text-center pointer-events-auto">
+          <section className="scroll-section h-screen flex items-center justify-center absolute inset-0 transition-all duration-500">
+            <div className="container mx-auto px-4 text-center pointer-events-auto relative z-10">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 opacity-0 transform translate-y-8 transition-all duration-1000 section-3-text">
-                Moments That Last
+                Product Designer by Day
               </h2>
               <p className="text-lg md:text-xl max-w-2xl mx-auto opacity-0 transform translate-y-8 transition-all duration-1000 delay-300 section-3-text">
-                Every second becomes eternal in the presence of love
+                Vibe coder at night 😎⚡️ | Creating meaningful digital
+                experiences
               </p>
             </div>
           </section>
 
-          <section className="scroll-section h-screen flex items-center justify-center absolute inset-0">
-            <div className="container mx-auto px-4 text-center pointer-events-auto">
+          <section className="scroll-section h-screen flex items-center justify-center absolute inset-0 transition-all duration-500">
+            <div className="container mx-auto px-4 text-center pointer-events-auto relative z-10">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 opacity-0 transform translate-y-8 transition-all duration-1000 section-4-text">
-                Beyond Reality
+                Connect With Me
               </h2>
-              <p className="text-lg md:text-xl max-w-2xl mx-auto opacity-0 transform translate-y-8 transition-all duration-1000 delay-300 section-4-text">
-                Experience the dimensions where love creates its own universe
-              </p>
+              <div className="flex justify-center items-center gap-8 mt-6 opacity-0 transform translate-y-8 transition-all duration-1000 delay-300 section-4-text">
+                <a
+                  href="https://www.linkedin.com/in/sylviadeborah/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:scale-110 transition-transform cursor-pointer"
+                >
+                  <svg
+                    className="w-8 h-8 text-white"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                  </svg>
+                </a>
+                <a
+                  href="https://bit.ly/sylviadeborah"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:scale-110 transition-transform cursor-pointer"
+                >
+                  <svg
+                    className="w-8 h-8 text-white"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+                  </svg>
+                </a>
+                <a
+                  href="mailto:works.syl@gmail.com"
+                  onClick={handleEmailClick}
+                  className="hover:scale-110 transition-transform cursor-pointer"
+                >
+                  <svg
+                    className="w-8 h-8 text-white"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                  </svg>
+                </a>
+              </div>
             </div>
           </section>
 
-          <section className="scroll-section h-screen flex items-center justify-center absolute inset-0">
-            <div className="container mx-auto px-4 text-center pointer-events-auto">
+          <section className="scroll-section h-screen flex items-center justify-center absolute inset-0 transition-all duration-500">
+            <div className="container mx-auto px-4 text-center pointer-events-auto relative z-10">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 opacity-0 transform translate-y-8 transition-all duration-1000 section-5-text">
-                Valentime
+                Explore My Work
               </h2>
               <p className="text-lg md:text-xl max-w-2xl mx-auto opacity-0 transform translate-y-8 transition-all duration-1000 delay-300 section-5-text">
-                Where love and time become one
+                You can check out my history and previous works at my personal
+                website.
               </p>
-              <button
-                onClick={() => {
-                  if (scrollSmootherRef.current) {
-                    // Smoothly reset scroll position
-                    scrollSmootherRef.current.scrollTo(0, 3);
-                    if (sceneManagerRef.current) {
-                      sceneManagerRef.current.restart();
+              <div className="flex justify-center gap-4 mt-8">
+                <button
+                  onClick={() => {
+                    if (scrollSmootherRef.current) {
+                      scrollSmootherRef.current.scrollTo(0, 3);
+                      if (sceneManagerRef.current) {
+                        sceneManagerRef.current.restart();
+                      }
                     }
-                  }
-                }}
-                className="mt-8 px-6 py-3 bg-white text-black rounded-full font-medium opacity-0 transform translate-y-8 transition-all duration-1000 delay-600 section-5-text hover:bg-opacity-80 transition-colors"
-              >
-                Begin Again
-              </button>
+                  }}
+                  className="px-6 py-3 bg-white text-black rounded-full font-medium opacity-0 transform translate-y-8 transition-all duration-1000 delay-600 section-5-text hover:bg-opacity-80 transition-colors"
+                >
+                  Start Over
+                </button>
+                <a
+                  href="https://bit.ly/sylviadeborah"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-3 bg-white text-black rounded-full font-medium opacity-0 transform translate-y-8 transition-all duration-1000 delay-600 section-5-text hover:bg-opacity-80 transition-colors"
+                >
+                  Visit My Website
+                </a>
+              </div>
             </div>
           </section>
         </div>
@@ -232,6 +294,13 @@ export const Scene: React.FC<SceneProps> = ({ isActive }) => {
 
       {/* Overlay for better text visibility */}
       <div className="fixed inset-0 bg-black bg-opacity-30 pointer-events-none" />
+
+      {/* Toast Notification */}
+      {showToast && (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-80 text-white px-6 py-3 rounded-full z-50 pointer-events-none">
+          Email copied to clipboard!
+        </div>
+      )}
     </div>
   );
 };
