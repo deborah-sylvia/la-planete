@@ -38,7 +38,7 @@ export const Loader: React.FC = () => {
   return (
     <div className="loader-container fixed inset-0 flex flex-col items-center justify-center bg-black z-50">
       <AnimatedText
-        text="Testing LOL"
+        text="Vibe Coding Project 1"
         className="text-4xl md:text-6xl font-bold mb-8 tracking-widest"
       />
 

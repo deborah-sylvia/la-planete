@@ -204,9 +204,44 @@ export const Scene: React.FC<SceneProps> = ({ isActive }) => {
           <section className="scroll-section h-screen flex items-center justify-center absolute inset-0 transition-all duration-500">
             <div className="container mx-auto px-4 text-center pointer-events-auto relative z-10">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 opacity-0 transform translate-y-8 transition-all duration-1000 section-4-text">
+                Explore My Work
+              </h2>
+              <p className="text-lg md:text-xl max-w-2xl mx-auto opacity-0 transform translate-y-8 transition-all duration-1000 delay-300 section-4-text">
+                You can check out my history and previous works at my personal
+                website.
+              </p>
+              <div className="flex justify-center gap-4 mt-8">
+                <button
+                  onClick={() => {
+                    if (scrollSmootherRef.current) {
+                      scrollSmootherRef.current.scrollTo(0, 3);
+                      if (sceneManagerRef.current) {
+                        sceneManagerRef.current.restart();
+                      }
+                    }
+                  }}
+                  className="px-6 py-3 text-white border border-white bg-transparent rounded-full font-medium opacity-0 transform translate-y-8 transition-all duration-1000 delay-600 section-4-text hover:bg-opacity-80 transition-colors hover:bg-white hover:text-black"
+                >
+                  Start Over
+                </button>
+                <a
+                  href="https://bit.ly/sylviadeborah"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-3 text-white border border-white bg-transparent rounded-full font-medium opacity-0 transform translate-y-8 transition-all duration-1000 delay-600 section-4-text hover:bg-opacity-80 transition-colors hover:bg-white hover:text-black"
+                >
+                  Visit My Website
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <section className="scroll-section h-screen flex items-center justify-center absolute inset-0 transition-all duration-500">
+            <div className="container mx-auto px-4 text-center pointer-events-auto relative z-10">
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 opacity-0 transform translate-y-8 transition-all duration-1000 section-5-text">
                 Connect With Me
               </h2>
-              <div className="flex justify-center items-center gap-8 mt-6 opacity-0 transform translate-y-8 transition-all duration-1000 delay-300 section-4-text">
+              <div className="flex justify-center items-center gap-8 mt-6 opacity-0 transform translate-y-8 transition-all duration-1000 delay-300 section-5-text">
                 <a
                   href="https://www.linkedin.com/in/sylviadeborah/"
                   target="_blank"
@@ -250,41 +285,6 @@ export const Scene: React.FC<SceneProps> = ({ isActive }) => {
                   >
                     <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
                   </svg>
-                </a>
-              </div>
-            </div>
-          </section>
-
-          <section className="scroll-section h-screen flex items-center justify-center absolute inset-0 transition-all duration-500">
-            <div className="container mx-auto px-4 text-center pointer-events-auto relative z-10">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 opacity-0 transform translate-y-8 transition-all duration-1000 section-5-text">
-                Explore My Work
-              </h2>
-              <p className="text-lg md:text-xl max-w-2xl mx-auto opacity-0 transform translate-y-8 transition-all duration-1000 delay-300 section-5-text">
-                You can check out my history and previous works at my personal
-                website.
-              </p>
-              <div className="flex justify-center gap-4 mt-8">
-                <button
-                  onClick={() => {
-                    if (scrollSmootherRef.current) {
-                      scrollSmootherRef.current.scrollTo(0, 3);
-                      if (sceneManagerRef.current) {
-                        sceneManagerRef.current.restart();
-                      }
-                    }
-                  }}
-                  className="px-6 py-3 bg-white text-black rounded-full font-medium opacity-0 transform translate-y-8 transition-all duration-1000 delay-600 section-5-text hover:bg-opacity-80 transition-colors"
-                >
-                  Start Over
-                </button>
-                <a
-                  href="https://bit.ly/sylviadeborah"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-3 bg-white text-black rounded-full font-medium opacity-0 transform translate-y-8 transition-all duration-1000 delay-600 section-5-text hover:bg-opacity-80 transition-colors"
-                >
-                  Visit My Website
                 </a>
               </div>
             </div>
