@@ -12,7 +12,7 @@ export class AudioManager {
     // Create sounds
     this.sounds = {
       ambient: new Howl({
-        src: ['/assets/audio/ambient.wav'],
+        src: ['/assets/audio/ambient.mp3'],
         loop: true,
         volume: 0.2,
         autoplay: false,
